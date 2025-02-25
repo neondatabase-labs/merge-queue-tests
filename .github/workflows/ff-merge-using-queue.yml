@@ -6,5 +6,8 @@ on:
       - main
 
 jobs:
-  - name: Fail the job to ensure we only merge using fast forwards
-    run: exit 1
+  fail:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Fail the job to ensure we only merge using fast forwards
+        run: exit 1
