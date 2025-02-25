@@ -1,0 +1,14 @@
+name: Fast-Forward in merge queue
+
+on:
+  merge_group:
+
+jobs:
+  ff-merge:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Fast forwarding
+        uses: sequoia-pgp/fast-forward@ea7628bedcb0b0b96e94383ada458d812fca4979
+        with:
+          merge: true
+          comment: always
