@@ -1,6 +1,7 @@
 name: Block Merge
 
 on:
+  pull_request:
   merge_group:
     types: [checks_requested]
 
@@ -9,4 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fail the job
+        if: github.event_name == 'merge_group'
         run: exit 1
