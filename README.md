@@ -1,3 +1,3 @@
 # merge-queue-tests
 
-six
+seven
