@@ -1,0 +1,21 @@
+name: Merge queue
+
+on:
+  pull_request:
+  merge_group:
+    types: [checks_requested]
+
+jobs:
+  merge-group-check:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fast forward branch
+        if: github.event_name == 'merge_group'
+        uses: neondatabase/dev-actions/fast-forward@jc/fast-forward-action
+        with:
+          github-token: ${{ secrets.JC_TOKEN }}
+      - name: Fail the job to prevent merge queue merge
+        if: github.event_name == 'merge_group'
+        run: exit 1
