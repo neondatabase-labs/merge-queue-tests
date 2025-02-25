@@ -7,14 +7,15 @@ on:
 
 jobs:
   merge-group-check:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Fast forward branch
         if: github.event_name == 'merge_group'
-        uses: sequoia-pgp/fast-forward@ea7628bedcb0b0b96e94383ada458d812fca4979
+        uses: neondatabase/dev-actions/fast-forward@jc/fast-forward-action
         with:
-          merge: true
-          github_token: ${{ secrets.VIPVAP_TOKEN }}
+          github-token: ${{ secrets.JC_TOKEN }}
       - name: Fail the job to prevent merge queue merge
         if: github.event_name == 'merge_group'
         run: exit 1
