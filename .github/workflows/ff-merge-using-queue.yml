@@ -1,13 +1,12 @@
-name: Fast-Forward in merge queue
+name: Block Merge
 
 on:
   merge_group:
-    branches:
-      - main
+    types: [checks_requested]
 
 jobs:
-  fail:
-    runs-on: ubuntu-22.04
+  always_fail:
+    runs-on: ubuntu-latest
     steps:
-      - name: Fail the job to ensure we only merge using fast forwards
+      - name: Fail the job
         run: exit 1
