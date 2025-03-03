@@ -11,11 +11,10 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Fast forward branch
-        if: github.event_name == 'merge_group'
-        uses: neondatabase/dev-actions/fast-forward@jc/fast-forward-action
-        with:
-          github-token: ${{ secrets.JC_TOKEN }}
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Fail the job to prevent merge queue merge
         if: github.event_name == 'merge_group'
         run: exit 1
