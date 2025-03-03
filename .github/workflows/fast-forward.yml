@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Fetch PR state
         id: pr-state
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >-
           echo "mergable=$(gh api /repos/${{ env.GITHUB_REPOSITORY }}/pulls/${{ github.event.issue.number }})" | tee -a "${GITHUB_OUTPUT}"
 
