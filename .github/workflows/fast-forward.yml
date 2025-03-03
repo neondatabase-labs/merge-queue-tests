@@ -21,7 +21,7 @@ jobs:
       - name: Fetch PR state
         id: pr-state
         run: >-
-          echo "mergable=$(gh api /repos/${{ GITHUB_REPOSITORY }}/pulls/${{ github.event.issue.number }})" | tee -a "${GITHUB_OUTPUT}"
+          echo "mergable=$(gh api /repos/${{ env.GITHUB_REPOSITORY }}/pulls/${{ github.event.issue.number }})" | tee -a "${GITHUB_OUTPUT}"
 
       - name: Fast forwarding
         uses: sequoia-pgp/fast-forward@ea7628bedcb0b0b96e94383ada458d812fca4979
