@@ -23,11 +23,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >-
-          echo "mergeable=$(gh api /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} -q '.mergeable')" | tee -a "${GITHUB_OUTPUT}"
+          echo "mergeable_state=$(gh api /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} -q '.mergeable_state')" | tee -a "${GITHUB_OUTPUT}"
 
       - name: Fast forwarding
         uses: sequoia-pgp/fast-forward@ea7628bedcb0b0b96e94383ada458d812fca4979
-        if: ${{ steps.pr-state.outputs.mergeable == 'true' }}
+        # See https://docs.github.com/en/graphql/reference/enums#mergestatestatus
+        if: ${{ steps.pr-state.outputs.mergeable == 'clean' }}
         with:
           merge: true
           comment: on-error
