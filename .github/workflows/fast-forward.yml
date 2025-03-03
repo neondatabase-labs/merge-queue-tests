@@ -25,7 +25,7 @@ jobs:
 
       - name: Fast forwarding
         uses: sequoia-pgp/fast-forward@ea7628bedcb0b0b96e94383ada458d812fca4979
-        if: ${{ steps.pr-state.outputs.mergeable == "true" }}
+        if: ${{ steps.pr-state.outputs.mergeable == 'true' }}
         with:
           merge: true
           comment: on-error
