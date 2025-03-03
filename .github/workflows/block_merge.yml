@@ -12,15 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fetch PR number
+        if: github.event_name == 'merge_group'
         id: pr-number
+        env:
+          MERGE_QUEUE_REF: ${{ github.event.merge_group.head_ref }}
         run: >-
-          echo "pr-number=$(echo '${{ toJson(github) }}' | jq '.event.merge_group.head_ref | capture("refs/heads/gh-readonly-queue/(?<branch>.*)/pr-(?<pr-number>\\d+)-[0-9a-f]{40}") | .pr-number')" | tee -a "${GITHUB_OUTPUT}"
-          
+          echo pr-number=$(echo $MERGE_QUEUE_REF | jq -Rr 'capture("refs/heads/gh-readonly-queue/(?<branch>.*)/pr-(?<pr_number>[0-9]+)-[0-9a-f]{40}") | .pr_number') | tee -a "${GITHUB_OUTPUT}"
+
       - name: Fail the job to prevent merge queue merge
         if: github.event_name == 'merge_group'
         run: exit 1
 
       - name: Comment to merge using workflow
-        if: ${{ always() }}
+        if: ${{ always() && github.event_name == 'merge_group' }}
+        env:
+          GH_TOKEN: ${{ secrets.JC_TOKEN }}
         run: >-
           gh pr comment ${{ steps.pr-number.outputs.pr-number }} -R ${{ github.repository }} -b "/fast-forward"
