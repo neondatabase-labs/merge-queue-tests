@@ -1,35 +1,23 @@
 name: Fast forward merge
 on:
-  issue_comment:
-    types: [created, edited]
+  pull_request:
+    types: [labeled]
+
 jobs:
   fast-forward:
     # Only run if the comment contains the /fast-forward command.
     if: >-
       ${{
-        contains(github.event.comment.body, '/fast-forward')
-        && github.event.issue.pull_request
+        contains(github.event.label.name, 'fast-forward')
       }}
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
-
     steps:
-      - name: Fetch PR state
-        id: pr-state
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >-
-          echo "mergeable_state=$(gh api /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} -q '.mergeable_state')" | tee -a "${GITHUB_OUTPUT}"
-
       - name: Fast forwarding
         uses: sequoia-pgp/fast-forward@ea7628bedcb0b0b96e94383ada458d812fca4979
         # See https://docs.github.com/en/graphql/reference/enums#mergestatestatus
-        if: ${{ steps.pr-state.outputs.mergeable == 'clean' }}
+        if: ${{ github.event.pull_request.mergeable_state  == 'clean' }}
         with:
           merge: true
-          comment: on-error
+          comment: never
           github_token: ${{ secrets.JC_TOKEN }}

@@ -23,9 +23,9 @@ jobs:
         if: github.event_name == 'merge_group'
         run: exit 1
 
-      - name: Comment to merge using workflow
+      - name: Label to merge using workflow
         if: ${{ always() && github.event_name == 'merge_group' }}
         env:
           GH_TOKEN: ${{ secrets.JC_TOKEN }}
         run: >-
-          gh pr comment ${{ steps.pr-number.outputs.pr-number }} -R ${{ github.repository }} -b "/fast-forward"
+          gh pr edit ${{ steps.pr-number.outputs.pr-number }} -R ${{ github.repository }} --add-label "fast-forward"
